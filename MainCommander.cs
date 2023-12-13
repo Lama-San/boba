@@ -1,6 +1,6 @@
 ﻿
 // фасад для исполнителей команд
-internal class MainCommander : ICommander
+public class MainCommander : ICommander
 {
     ICommander commander;
     internal void SetInterpretator(ICommander commander)
