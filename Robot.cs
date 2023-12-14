@@ -7,10 +7,6 @@ public class Robot
 
     public int X { get;set; }
     public int Y { get;set; }
-    private Robot() 
-    { 
-     
-    }
     public static Robot GetInstanse()
     {
         if (instance == null) 
@@ -22,6 +18,6 @@ public class Robot
 
     internal static Robot GetInstance()
     {
-        throw new NotImplementedException();
+       return instance;
     }
 }

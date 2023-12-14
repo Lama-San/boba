@@ -1,27 +1,14 @@
 ﻿// класс для ввода данных
+using System;
 using System.ComponentModel.Design;
 
 public class Controller
+// класс для ввода данных
+internal class Controller
 {
     private MainCommander mainCommander;
-
-    //public void StartGame()
-    //{  
-    //    mainCommander = new MainCommander(); 
-    ////Получение первыого ввода от ползователя и создание поля 
-
-
-    //    //Создание экземпляров поле и робота
-    //    Field field = Field.GetInstance();
-    //    Robot robot = Robot.GetInstanse();
-
-    //    //Создание испольтнителя команд
-    //    FieldCommander fieldcommander = new FieldCommander();
-    //    RobotCommander robotCommander = new RobotCommander();
-
-    //    //создание главного исполнителя команд
-    //    mainCommander.SetInterpretator(fieldcommander);
-    //}
+    Robot robot = Robot.GetInstance();
+    Field field = Field.GetInstance();
 
     public Controller(MainCommander mainCommander)
     {
@@ -29,33 +16,21 @@ public class Controller
         mainCommander.SetInterpretator(new FieldCommander());
     }
 
-    // цикл по запросу команды
     internal void StartListner()
     {
-        int[] Command = new int[25];
-        string a = Console.ReadLine();
-        for (int i = 0;i < 25; i++)
-        {
-            Command[i]= int.Parse(a[i].ToString());
-        }
-        mainCommander.SetInterpretator(new RobotCommander());
-        do
-        {
-            int c = int.Parse(Console.ReadLine());
-        }
-        while (true);
-        // первый запрос на 25 символов (рисование поля) передается mainCommander в метод Execute
-        // смена интерпретатора у mainCommander на RobotCommander
-        // остальные запросы передаются туда же (цикл, пока робот не достигнет конечной точки)
+        Console.WriteLine("2 - непреадолимое для самурая препятствие, 1 - возможность для достижения цели самурая , 3 - самурай, 4 - цель жизни самурая");
+        Console.WriteLine("Введите 25 символов для определения поля битвы самурая");
+        string firstCommands = Console.ReadLine();  //внесение данных о поле в одне строку 25 символов
 
-    }
-    static Controller instance;
-    public static Controller GetInstance()
-    {
-        if (instance == null)
-            instance = new Controller(default);
-        return instance;
-    }
+        int[] value = new int[25]; //массив куда поместится поле, которое станет двухмерным в будущем
+        for (int i = 0; i < 25; i++)
+            value[i] = int.Parse(firstCommands[i].ToString());
 
+        mainCommander.Execute(value);   // первый запрос на 25 символов (рисование поля) передается mainCommander в метод Execute
+
+        mainCommander.SetInterpretator(new RobotCommander());  // смена интерпретатора у mainCommander на RobotCommander
+
+        while ((robot.X != field.X) || (robot.Y != field.Y)) // остальные запросы передаются туда же (цикл, пока робот не достигнет конечной точки)
+            mainCommander.Execute(Console.ReadLine().Select(s => int.Parse(s.ToString())).ToArray());
+    }
 }
-
